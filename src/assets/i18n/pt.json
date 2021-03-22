@@ -1,0 +1,17 @@
+{
+    "home": {
+        "greeting": "Olá, {{ name }}!",
+        "logged-as": "Logado como {{ email }}",
+        "role": "Nível de acesso {{ role }}"
+    },
+    "header": {
+        "home": "Início",
+        "clients": "Clientes",
+        "logout": "Sair"
+    },
+    "clients": {
+        "add-button": "Adicionar Cliente",
+        "register-title": "Registrar Cliente",
+        "update-title": "Atualizar Cliente"
+    }
+}

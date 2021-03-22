@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <a href="#" class="navbar-brand">Card Layout Picker</a>
+    <ul class="navbar-nav mr-auto" *ngIf="user">
+        <li class="nav-item">
+            <a href="/home" class="nav-link" routerLink="home" translate>header.home</a>
+        </li>
+        <li class="nav-item" *ngIf="isRole('ROLE_ADMIN')">
+            <a href="/users" class="nav-link" routerLink="users" translate>header.clients</a>
+        </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto" *ngIf="user">
+        <li class="nav-item">
+            <a href class="nav-link" (click)="logout()" translate>header.logout</a>
+        </li>
+    </ul>
+</nav>

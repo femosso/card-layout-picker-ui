@@ -1,0 +1,17 @@
+{
+    "home": {
+        "greeting": "Hi, {{ name }}!",
+        "logged-as": "Logged as {{ email }}",
+        "role": "Role {{ role }}"
+    },
+    "header": {
+        "home": "Home",
+        "clients": "Clients",
+        "logout": "Logout"
+    },
+    "clients": {
+        "add-button": "Add Client",
+        "register-title": "Register Client",
+        "update-title": "Update Client"
+    }
+}
