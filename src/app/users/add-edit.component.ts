@@ -29,10 +29,13 @@ export class AddEditComponent implements OnInit {
         this.form = this.formBuilder.group({
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
-            email: ['', Validators.required]
+            email: ['', Validators.required],
+            password: ''
         });
 
-        if (!this.isAddMode) {
+        if (this.isAddMode) {
+            this.f.password.setValidators([Validators.required, Validators.minLength(6)]);
+        } else {
             this.userService.get(this.id)
                 .pipe(first())
                 .subscribe(x => {

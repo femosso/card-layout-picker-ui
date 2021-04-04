@@ -1,0 +1,38 @@
+<div class="row justify-content-between">
+    <div>
+        <h4>Cards</h4>
+    </div>
+    <div>
+        <a routerLink="add" class="btn btn-sm btn-success mb-2" translate>cards.add-button</a>
+    </div>
+</div>
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width: 30%">ID</th>
+                <th style="width: 30%">Image Path</th>
+                <th style="width: 10%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let card of cards">
+                <td>{{ card.id }}</td>
+                <td><img [src]="sanitize(card.imagePath)" class="img-fluid img-thumbnail"></td>
+                <td style="white-space: nowrap">
+                    <a routerLink="edit/{{card.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+                    <button (click)="deleteCard(card.id)" class="btn btn-sm btn-danger"
+                        [disabled]="card.isDeleting">
+                        <span *ngIf="card.isDeleting" class="spinner-border spinner-border-sm"></span>
+                        <span *ngIf="!card.isDeleting">Delete</span>
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="!cards">
+                <td colspan="4" class="text-center">
+                    <span class="spinner-border spinner-border-lg align-center"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

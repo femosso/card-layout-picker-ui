@@ -1,22 +1,24 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
-import { UsersRoutingModule } from './users-routing.module';
+import { CardsRoutingModule } from './cards-routing.module';
 import { LayoutComponent } from './layout.component';
+import { CardFormComponent } from './card-form/card-form.component';
 import { ListComponent } from './list.component';
-import { AddEditComponent } from './add-edit.component';
 
 @NgModule({
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        UsersRoutingModule
+        CardsRoutingModule,
+        NgxDropzoneModule
     ],
     declarations: [
         LayoutComponent,
         ListComponent,
-        AddEditComponent
+        CardFormComponent
     ]
 })
-export class UsersModule { }
+export class CardsModule { }

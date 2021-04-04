@@ -7,6 +7,9 @@
         <li class="nav-item" *ngIf="isRole('ROLE_ADMIN')">
             <a href="/users" class="nav-link" routerLink="users" translate>header.clients</a>
         </li>
+        <li class="nav-item" *ngIf="isRole('ROLE_CLIENT')">
+            <a href="/cards" class="nav-link" routerLink="cards" translate>header.cards</a>
+        </li>
     </ul>
 
     <ul class="navbar-nav ml-auto" *ngIf="user">
