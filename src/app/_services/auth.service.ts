@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { User } from '../_models/user';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -14,7 +15,8 @@ export class AuthService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private translateService: TranslateService
     ) {
         this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
         this.user = this.userSubject.asObservable();
@@ -24,7 +26,7 @@ export class AuthService {
         return this.userSubject.value;
     }
 
-    login(email, password) {
+    login(email: string, password: string) {
         return this.http.post<User>(environment.apiUrl + "/auth/login", { email, password })
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -45,38 +47,12 @@ export class AuthService {
         return this.http.post(environment.apiUrl + "/auth/register", user);
     }
 
-    getAll() {
-        return this.http.get<User[]>(environment.apiUrl + "/users");
+    forgotPassword(email: string) {
+        var locale = this.translateService.getDefaultLang();
+        return this.http.post<User>(environment.apiUrl + "/auth/forgot-password", { email, locale });
     }
 
-    getById(id: string) {
-        return this.http.get<User>(environment.apiUrl + "/users/${id}");
-    }
-
-    update(id, params) {
-        return this.http.put(environment.apiUrl + "users/${id}", params)
-            .pipe(map(x => {
-                // update stored user if the logged in user updated their own record
-                if (id == this.userValue.id) {
-                    // update local storage
-                    const user = { ...this.userValue, ...params };
-                    localStorage.setItem('user', JSON.stringify(user));
-
-                    // publish updated user to subscribers
-                    this.userSubject.next(user);
-                }
-                return x;
-            }));
-    }
-
-    delete(id: string) {
-        return this.http.delete(environment.apiUrl + "/users/${id}")
-            .pipe(map(x => {
-                // auto logout if the logged in user deleted their own record
-                if (id == this.userValue.id) {
-                    this.logout();
-                }
-                return x;
-            }));
+    updatePassword(token: string, password: string) {
+        return this.http.post<User>(environment.apiUrl + "/auth/update-password", { token, password });
     }
 }

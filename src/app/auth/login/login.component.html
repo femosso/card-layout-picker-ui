@@ -17,13 +17,15 @@
         <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
           <div *ngIf="f.password.errors.required">Password is required</div>
         </div>
+        <small class="form-text text-muted text-right"><a routerLink="../forgot-password">Forgot password?</a></small>
+        <small class="form-text text-muted text-right"><a routerLink="../update-password/977cf759-5a88-4857-b521-3c537c6eee10">Update password?</a></small>
       </div>
       <div class="form-group">
-        <button [disabled]="loading" class="btn btn-primary">
+        <a routerLink="../register" class="btn btn-link float-right">Register</a>
+        <button [disabled]="loading" class="btn btn-primary float-right">
           <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
           Login
         </button>
-        <a routerLink="../register" class="btn btn-link">Register</a>
       </div>
     </form>
   </div>

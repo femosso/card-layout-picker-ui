@@ -6,6 +6,8 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { LayoutComponent } from './layout.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { UpdatePasswordComponent } from './update-password/update-password.component';
 
 @NgModule({
     imports: [
@@ -16,7 +18,9 @@ import { RegisterComponent } from './register/register.component';
     declarations: [
         LayoutComponent,
         LoginComponent,
-        RegisterComponent
+        RegisterComponent,
+        ForgotPasswordComponent,
+        UpdatePasswordComponent
     ]
 })
 export class AuthModule { }
