@@ -1,0 +1,190 @@
+<div class="row">
+    <div class="col-sm">
+        <h4>Orders</h4>
+    </div>
+    <div *ngIf="isRole('ROLE_CLIENT')" class="col-sm">
+        <a routerLink="add" class="btn btn-sm btn-success mb-2 float-right" translate>orders.add-button</a>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-sm">
+        <ngb-accordion #a="ngbAccordion" activeIds="filter-panel">
+            <ngb-panel id="filter-panel">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="m-0">Table Filter</h5>
+                        <button ngbPanelToggle class="btn">
+                            <fa-icon [icon]="opened ? iconMinimize : iconMaximize"></fa-icon>
+                        </button>
+                    </div>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="start">Start</label>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input class="form-control" #dFrom [placeholder]="'' | datePlaceholder"
+                                            formControlName="fromDate" ngbDatepicker #from="ngbDatepicker"
+                                            [maxDate]="toDate && toDate.day ? toDate : calendarMaxDate" container="body"
+                                            [(ngModel)]="fromDate">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sm btn-outline-secondary" (click)="from.toggle()"
+                                                type="button">
+                                                <fa-icon [icon]="iconCalendar"></fa-icon>
+                                            </button>
+                                        </div>
+                                        <div class="invalid-feedback" [style.display]="'block'" *ngIf="dFrom.invalid">
+                                            Date is incorrect</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label for="finish">Finish</label>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input class="form-control" #dTo [placeholder]="'' | datePlaceholder"
+                                            formControlName="toDate" ngbDatepicker #to="ngbDatepicker"
+                                            [minDate]="fromDate" [maxDate]="calendarMaxDate" container="body"
+                                            [(ngModel)]="toDate">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sm btn-outline-secondary" (click)="to.toggle()"
+                                                type="button">
+                                                <fa-icon [icon]="iconCalendar"></fa-icon>
+                                            </button>
+                                        </div>
+                                        <div class="invalid-feedback" [style.display]="'block'" *ngIf="dTo.invalid">
+                                            Date is incorrect</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="name">Name</label>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" formControlName="name" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label for="status">Status</label>
+                                <div class="form-group">
+                                    <select class="form-control" formControlName="statusId">
+                                        <option></option>
+                                        <ng-container *ngFor="let statusType of statusTypes; let i = index">
+                                            <ng-container [ngSwitch]="statusType.id">
+                                                <option *ngSwitchCase="'36e3b5b1-9b0d-11eb-970a-0242ac110002'"
+                                                    [value]="statusTypes[i].id">
+                                                    Waiting Employee</option>
+                                                <option *ngSwitchCase="'3b1bb6fd-9b0d-11eb-970a-0242ac110002'"
+                                                    [value]="statusTypes[i].id">
+                                                    Validating Fields</option>
+                                                <option *ngSwitchCase="'3f7813a0-9b0d-11eb-970a-0242ac110002'"
+                                                    [value]="statusTypes[i].id">
+                                                    Created</option>
+                                                <option *ngSwitchCase="'41dfc923-9b0d-11eb-970a-0242ac110002'"
+                                                    [value]="statusTypes[i].id">In
+                                                    Production</option>
+                                                <option *ngSwitchCase="'4465d449-9b0d-11eb-970a-0242ac110002'"
+                                                    [value]="statusTypes[i].id">
+                                                    Finished</option>
+                                            </ng-container>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <a class="btn btn-link float-right" [routerLink]="" (click)="clearFilter()">
+                                        Clear Filter
+                                    </a>
+                                    <button [disabled]="service.loading$ | async" class="btn btn-primary float-right">
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-sm">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" sortable="name" (sort)="onSort($event)">Name</th>
+                    <th scope="col" sortable="status.id" (sort)="onSort($event)">Status</th>
+                    <th scope="col" sortable="createdAt" (sort)="onSort($event)">CreatedAt</th>
+                    <th *ngIf="isRole('ROLE_ADMIN')" class="text-center">
+                        <input type="checkbox" [(ngModel)]="selectAll" name="list_name" value="m1"
+                            (change)="checkUncheckAll()" />
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="service.loading$ | async; else view">
+                    <tr>
+                        <td colspan="4" style="text-align:center;">
+                            <app-loading></app-loading>
+                        </td>
+                    </tr>
+                </ng-container>
+                <ng-template #view>
+                    <tr *ngFor="let order of orders$ | async">
+                        <td>
+                            <ngb-highlight [result]="order.name" [term]="service.searchTerm"></ngb-highlight>
+                        </td>
+                        <td>
+                            <ngb-highlight [result]="order.statusId | statusNameFormat" [term]="service.searchTerm">
+                            </ngb-highlight>
+                        </td>
+                        <td>
+                            <ngb-highlight [result]="order.createdAt | utcToDateFormat" [term]="service.searchTerm">
+                            </ngb-highlight>
+                        </td>
+                        <td *ngIf="isRole('ROLE_ADMIN')" class="text-center">
+                            <input type="checkbox" [(ngModel)]="order.checked" name="list_name" value="{{order.id}}"
+                                (change)="isAllSelected()" />
+                        </td>
+                    </tr>
+                    <tr *ngIf="!(orders$ | async)?.length">
+                        <td colspan="4" style="text-align:center;">No data available.</td>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between p-2">
+            <ngb-pagination [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+            </ngb-pagination>
+
+            <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
+                <option [ngValue]="10">10 items per page</option>
+                <option [ngValue]="25">25 items per page</option>
+                <option [ngValue]="100">100 items per page</option>
+            </select>
+        </div>
+    </div>
+</div>
+<form *ngIf="isRole('ROLE_ADMIN')" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <button [disabled]="loadingSubmit" class="btn btn-success float-right">
+                    <span *ngIf="loadingSubmit" class="spinner-border spinner-border-sm mr-1"></span>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

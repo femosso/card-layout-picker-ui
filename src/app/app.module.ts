@@ -14,6 +14,7 @@ import { AlertComponent } from './alert/alert.component';
 import { NotificationComponent } from './notification/notification.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    FontAwesomeModule
   ],
   declarations: [
     AppComponent,

@@ -33,7 +33,8 @@ export class AuthService {
                 localStorage.setItem('user', JSON.stringify(user));
                 this.userSubject.next(user);
                 return user;
-            }));
+            })
+        );
     }
 
     logout() {
@@ -52,7 +53,8 @@ export class AuthService {
         return this.http.post<User>(environment.apiUrl + "/auth/forgot-password", { email, locale });
     }
 
-    updatePassword(token: string, password: string) {
-        return this.http.post<User>(environment.apiUrl + "/auth/update-password", { token, password });
+    updatePassword(token: string, password: string, validate: boolean = false) {
+        var url = environment.apiUrl + "/auth/update-password" + (validate ? "?validate=true" : "");
+        return this.http.post<User>(url, { token, password });
     }
 }

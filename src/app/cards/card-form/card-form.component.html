@@ -15,43 +15,58 @@
     </div>
     <div class="row">
         <div class="col-sm">
-            <!-- If I remove this, the image gets resized, which I want. But it breaks formArray -->
-            <div class="form-group">
-                <div class="custom-dropzone" ngx-dropzone [multiple]="false" [accept]="'image/jpeg'"
-                    [maxFileSize]="1048576" (change)="onSelect($event)">
-                    <ngx-dropzone-label>
-                        <div>
-                            <h2>Select file to upload or drag it here.</h2>
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Card Layout</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm">
+                    <!-- If I remove this, the image gets resized, which I want. But it breaks formArray -->
+                    <div class="form-group">
+                        <div class="custom-dropzone" ngx-dropzone [multiple]="false" [accept]="'image/jpeg'"
+                            [maxFileSize]="1048576" (change)="onSelect($event)">
+                            <ngx-dropzone-label>
+                                <div>
+                                    <h2>Select file to upload or drag it here.</h2>
+                                </div>
+                            </ngx-dropzone-label>
+                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
+                                [file]="f" [removable]="true" (removed)="onRemove(f)">
+                                <!-- <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label> -->
+                            </ngx-dropzone-image-preview>
                         </div>
-                    </ngx-dropzone-label>
-                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f"
-                        [removable]="true" (removed)="onRemove(f)">
-                        <!-- <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label> -->
-                    </ngx-dropzone-image-preview>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-sm">
             <div class="row">
-                <div class="col">
+                <div class="col-sm">
                     <h4>Fields</h4>
                 </div>
-                <div class="col">
+                <div class="col-sm">
                     <button type="button" (click)="addField()" class="btn btn-primary float-right">Add More</button>
                 </div>
             </div>
             <hr>
-            <div class="form-group" formArrayName="fields">
-                <div *ngFor="let field of fields.controls; let i=index" [formGroupName]="i">
-                    <div class="input-group">
-                        <input type="text" class="form-control" formControlName="name" placeholder="Name" />
-                        <select class="form-control" formControlName="fieldTypeId">
-                            <option value="" hidden selected>Type</option>
-                            <option *ngFor="let fieldType of fieldTypes; let i = index" [value]="fieldTypes[i].id">
-                                {{ fieldTypes[i].type }}
-                            </option>
-                        </select>
-                        <button (click)="removeField(i)" class="btn btn-danger">Remove</button>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group" formArrayName="fields">
+                        <div *ngFor="let field of fields.controls; let i=index" [formGroupName]="i">
+                            <div class="input-group">
+                                <input type="text" class="form-control" formControlName="name" placeholder="Name" />
+                                <select class="form-control" formControlName="fieldTypeId">
+                                    <option value="" hidden selected>Type</option>
+                                    <option *ngFor="let fieldType of fieldTypes; let i = index"
+                                        [value]="fieldTypes[i].id">
+                                        {{ fieldTypes[i].name }}
+                                    </option>
+                                </select>
+                                <button (click)="removeField(i)" class="btn btn-danger">Remove</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,7 +74,7 @@
     </div>
     <hr />
     <div class="row">
-        <div class="col">
+        <div class="col-sm">
             <div class="form-group">
                 <button [disabled]="loading" class="btn btn-success float-right">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

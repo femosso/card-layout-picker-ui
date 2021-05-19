@@ -1,0 +1,97 @@
+<ng-container *ngIf="loadingPage; else view">
+    <app-loading></app-loading>
+</ng-container>
+<ng-template #view>
+    <div class="row">
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Card Layout</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm">
+                    <img [src]="cards[selectedCardIndex].imagePath" class="img-fluid img-thumbnail">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <ul class="pagination">
+                        <li class="page-item"> <button type="button" (click)="changeSelectedCard('prev')"
+                                class="page-link">Previous</button></li>
+                        <li class="page-item"><button type="button" (click)="changeSelectedCard('next')"
+                                class="page-link float-right">Next</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Fields</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <div *ngFor="let field of cards[selectedCardIndex].fields; let i=index">
+                            <div class="input-group">
+                                <input type="text" class="form-control" [value]="field.name" disabled />
+                                <select class="form-control" disabled>
+                                    <option>{{ field.type.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label for="name">Full name</label>
+                    <input type="text" formControlName="name" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Full name is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="form-group">
+                    <label for="personId">Person ID</label>
+                    <input type="text" formControlName="personId" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.personId.errors }" />
+                    <div *ngIf="submitted && f.personId.errors" class="invalid-feedback">
+                        <div *ngIf="f.personId.errors.required">Person ID is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="form-group">
+                    <label for="employeeId">Employee ID</label>
+                    <input type="text" formControlName="employeeId" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.employeeId.errors }" />
+                    <div *ngIf="submitted && f.employeeId.errors" class="invalid-feedback">
+                        <div *ngIf="f.employeeId.errors.required">Employee ID is required</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <button [disabled]="loadingSubmit" class="btn btn-success float-right">
+                        <span *ngIf="loadingSubmit" class="spinner-border spinner-border-sm mr-1"></span>
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>

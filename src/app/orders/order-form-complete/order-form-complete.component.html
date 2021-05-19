@@ -1,0 +1,139 @@
+<div class="col-md-6 offset-md-3 mt-5" *ngIf="!validated">
+    <div class="card">
+        <h4 class="card-header">Complete Registration</h4>
+        <div class="card-body">
+            <form [formGroup]="formValidate" (ngSubmit)="onSubmitValidate()">
+                <div class="form-group">
+                    <label for="personId">Person ID</label>
+                    <input type="password" formControlName="personId" class="form-control"
+                        [ngClass]="{ 'is-invalid': validationSubmitted && v.personId.errors }" />
+                    <div *ngIf="validationSubmitted && v.personId.errors" class="invalid-feedback">
+                        <div *ngIf="v.personId.errors.required">Person ID is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a routerLink="../../login" class="btn btn-link float-right">Cancel</a>
+                    <button [disabled]="validationLoading" class="btn btn-primary float-right">
+                        <span *ngIf="validationLoading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Confirm
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<ng-container *ngIf="validated">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Card Layout</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm">
+                    <img [src]="order.card.imagePath" class="img-fluid img-thumbnail">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Fields</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label for="name">Full name</label>
+                        <input type="text" class="form-control" [value]="order.name" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="personId">Person ID</label>
+                        <input type="text" class="form-control" [value]="order.personId" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeId">Employee ID</label>
+                        <input type="text" class="form-control" [value]="order.employeeId" disabled />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <form [formGroup]=" form" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="col-sm">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Photo upload</h4>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm">
+                        <!-- If I remove this, the image gets resized, which I want. But it breaks formArray -->
+                        <div class="form-group">
+                            <div class="custom-dropzone" ngx-dropzone [multiple]="false" [accept]="'image/jpeg'"
+                                [maxFileSize]="1048576" (change)="onSelect($event)">
+                                <ngx-dropzone-label>
+                                    <div>
+                                        <h2>Select file to upload or drag it here.</h2>
+                                    </div>
+                                </ngx-dropzone-label>
+                                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
+                                    [file]="f" [removable]="true" (removed)="onRemove(f)">
+                                    <!-- <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label> -->
+                                </ngx-dropzone-image-preview>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Please add your data</h4>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm">
+                        <div *ngFor="let field of order.card.fields; let i=index">
+                            <div class="form-group">
+                                <label [attr.for]="field.id">{{ field.name }}</label>
+                                <ng-container [ngSwitch]="field.type.id">
+                                    <input *ngSwitchCase="'57f7b92a-9026-11eb-8fcc-0242ac110002'" type="text"
+                                        [formControlName]="field.id" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && hasError(field.id) }" />
+                                    <input *ngSwitchCase="'6a4a1380-9026-11eb-8fcc-0242ac110002'" type="number"
+                                        [formControlName]="field.id" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && hasError(field.id) }" />
+                                    <input *ngSwitchCase="'631c82ab-9026-11eb-8fcc-0242ac110002'" type="date"
+                                        [formControlName]="field.id" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && hasError(field.id) }" />
+                                </ng-container>
+                                <div *ngIf="submitted && hasError(field.id)" class="invalid-feedback">
+                                    <div *ngIf="hasError(field.id).required">Field is required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <button [disabled]="loading" class="btn btn-success float-right">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-container>

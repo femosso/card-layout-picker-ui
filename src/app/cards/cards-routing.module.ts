@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { LayoutComponent } from './layout.component';
-import { ListComponent } from './list.component';
+import { CardsComponent } from './cards.component';
 import { CardFormComponent } from './card-form/card-form.component';
+import { CardListComponent } from './card-list/card-list.component';
+import { AuthGuard } from '../_helpers/auth.guard';
 
 const routes: Routes = [
     {
-        path: '', component: LayoutComponent,
+        path: '', component: CardsComponent,
+        canActivate: [AuthGuard],
         children: [
-            { path: '', component: ListComponent },
+            { path: '', component: CardListComponent },
             { path: 'add', component: CardFormComponent },
             { path: 'edit/:id', component: CardFormComponent }
         ]

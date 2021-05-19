@@ -1,0 +1,102 @@
+<ng-container *ngIf="loadingPage; else view">
+    <app-loading></app-loading>
+</ng-container>
+<ng-template #view>
+    <div class="row">
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Card Layout</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm">
+                    <img [src]="order.card.imagePath" class="img-fluid img-thumbnail">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Fields</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label for="name">Full name</label>
+                        <input type="text" class="form-control" [value]="order.name" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="personId">Person ID</label>
+                        <input type="text" class="form-control" [value]="order.personId" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeId">Employee ID</label>
+                        <input type="text" class="form-control" [value]="order.employeeId" disabled />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Photo</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm">
+                    <img [src]="order.card.imagePath" class="img-fluid img-thumbnail">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Data</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm">
+                    <div *ngFor="let orderAnswer of order.orderAnswers; let i=index">
+                        <div class="form-group">
+                            <label [attr.for]="orderAnswer.id">{{ orderAnswer.cardField.name }}</label>
+                            <ng-container [ngSwitch]="orderAnswer.cardField.type.id">
+                                <input *ngSwitchCase="'57f7b92a-9026-11eb-8fcc-0242ac110002'" type="text"
+                                    class="form-control" [value]="orderAnswer.answer" disabled />
+                                <input *ngSwitchCase="'6a4a1380-9026-11eb-8fcc-0242ac110002'" type="number"
+                                    class="form-control" [value]="orderAnswer.answer" disabled />
+                                <input *ngSwitchCase="'631c82ab-9026-11eb-8fcc-0242ac110002'" type="date"
+                                    class="form-control" [value]="orderAnswer.answer" disabled />
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <button type="button" [disabled]="loadingApprove || loadingReject" class="btn btn-success float-right"
+                    (click)="onSubmit('approve')">
+                    <span *ngIf="loadingApprove" class="spinner-border spinner-border-sm mr-1"></span>
+                    Approve
+                </button>
+                <button type="buttong" [disabled]="loadingApprove || loadingReject" class="btn btn-danger float-right"
+                    (click)="onSubmit('reject')">
+                    <span *ngIf="loadingReject" class="spinner-border spinner-border-sm mr-1"></span>
+                    Reject
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>

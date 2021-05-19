@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
-import { AlertService } from 'src/app/_services/alert.service';
 import { AuthService } from 'src/app/_services/auth.service';
+import { NotificationService } from 'src/app/_services/notification.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -22,7 +22,7 @@ export class ForgotPasswordComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private alertService: AlertService,
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -38,8 +38,6 @@ export class ForgotPasswordComponent implements OnInit {
   onSubmit(): void {
     this.submitted = true;
 
-    this.alertService.clear();
-
     if (this.form.invalid) {
       return;
     }
@@ -49,10 +47,11 @@ export class ForgotPasswordComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
+          this.notificationService.success("E-mail sent");
           this.router.navigate([this.returnUrl]);
         },
         error => {
-          this.alertService.error(error);
+          this.notificationService.error(error);
           this.loading = false;
         }
       );

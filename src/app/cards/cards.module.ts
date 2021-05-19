@@ -1,23 +1,28 @@
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
 import { CardsRoutingModule } from './cards-routing.module';
-import { LayoutComponent } from './layout.component';
+import { CardsComponent } from './cards.component';
 import { CardFormComponent } from './card-form/card-form.component';
-import { ListComponent } from './list.component';
+import { CardListComponent } from './card-list/card-list.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     imports: [
         CommonModule,
+        FormsModule,
         ReactiveFormsModule,
         CardsRoutingModule,
-        NgxDropzoneModule
+        NgxDropzoneModule,
+        SharedModule,
+        NgbModule
     ],
     declarations: [
-        LayoutComponent,
-        ListComponent,
+        CardsComponent,
+        CardListComponent,
         CardFormComponent
     ]
 })

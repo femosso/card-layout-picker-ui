@@ -1,10 +1,9 @@
-import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxDropzoneComponent } from 'ngx-dropzone';
 import { first } from 'rxjs/operators';
+
 import { CardFieldType } from 'src/app/_models/card';
 import { CardService } from 'src/app/_services/card.service';
 import { FileService } from 'src/app/_services/file.service';
@@ -12,8 +11,7 @@ import { NotificationService } from 'src/app/_services/notification.service';
 
 @Component({
 	selector: 'app-card-form',
-	templateUrl: './card-form.component.html',
-	styleUrls: ['./card-form.component.css']
+	templateUrl: './card-form.component.html'
 })
 export class CardFormComponent implements OnInit {
 	files: File[] = [];
@@ -62,11 +60,11 @@ export class CardFormComponent implements OnInit {
 					// })
 
 					for (let field of card.fields) {
-						let name: FormControl = new FormControl('');
 						let fieldTypeId: FormControl = new FormControl('');
+						let name: FormControl = new FormControl('');
 
+						fieldTypeId.setValue(field.type.id);
 						name.setValue(field.name);
-						fieldTypeId.setValue(field.fieldTypeId);
 
 						this.fields.push(new FormGroup({
 							name: name,
@@ -75,12 +73,17 @@ export class CardFormComponent implements OnInit {
 					}
 				});
 
-			// FIXME - This doesn't work
-			// this.fileService.get("088df7e7-20fc-43d8-beb9-24a3041eda75")
-			// 	.pipe(first())
-			// 	.subscribe(file => {
-			// 		this.files.push(file);
-			// 	});
+			this.fileService.get("672e6a5c-12c4-4099-b576-4f8e051ef6cb")
+				//.pipe(first())
+				.subscribe(file => {
+					console.log("file", file);
+					//this.files.push(file);
+				},
+				error => {
+					console.log("error", error);
+
+					this.notificationService.error(error);
+				});
 		}
 	}
 
@@ -142,7 +145,7 @@ export class CardFormComponent implements OnInit {
 			.subscribe(
 				data => {
 					this.notificationService.success('Registration successful');
-					this.router.navigate(['..', { relativeTo: this.route }]);
+					this.router.navigate(['cards']);
 				},
 				error => {
 					this.notificationService.error(error);
@@ -157,7 +160,7 @@ export class CardFormComponent implements OnInit {
 			.subscribe(
 				data => {
 					this.notificationService.success('Update successful');
-					this.router.navigate(['..', { relativeTo: this.route }]);
+					this.router.navigate(['cards']);
 				},
 				error => {
 					this.notificationService.error(error);

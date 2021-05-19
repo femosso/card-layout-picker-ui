@@ -9,6 +9,6 @@ export class FileService {
     constructor(private http: HttpClient) { }
 
     get(id: string) {
-        return this.http.get<File>(environment.apiUrl + "/files/" + id);
+        return this.http.get(environment.apiUrl + "/files/" + id);
     }
 }

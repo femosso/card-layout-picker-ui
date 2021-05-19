@@ -8,6 +8,7 @@
         "home": "Home",
         "clients": "Clients",
         "cards": "Cards",
+        "orders": "Orders",
         "logout": "Logout"
     },
     "clients": {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { first, tap } from 'rxjs/operators';
 
 import { AlertService } from '../_services/alert.service';
 import { UserService } from '../_services/user.service';
@@ -71,11 +71,11 @@ export class AddEditComponent implements OnInit {
 
     private createUser() {
         this.userService.register(this.form.value)
-            .pipe(first())
+            .pipe(first(), tap(() => this.loading = true))
             .subscribe(
                 data => {
                     this.alertService.success('User added successfully', { keepAfterRouteChange: true });
-                    this.router.navigate(['.', { relativeTo: this.route }]);
+                    this.router.navigate(['users']);
                 },
                 error => {
                     this.alertService.error(error);
@@ -90,7 +90,7 @@ export class AddEditComponent implements OnInit {
             .subscribe(
                 data => {
                     this.alertService.success('Update successful', { keepAfterRouteChange: true });
-                    this.router.navigate(['..', { relativeTo: this.route }]);
+                    this.router.navigate(['users']);
                 },
                 error => {
                     this.alertService.error(error);

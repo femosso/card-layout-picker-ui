@@ -16,6 +16,7 @@ export class UpdatePasswordComponent implements OnInit {
   form: FormGroup;
   loading = false;
   submitted = false;
+  isValid = false;
   returnUrl: string;
 
   constructor(
@@ -30,11 +31,13 @@ export class UpdatePasswordComponent implements OnInit {
     this.token = this.route.snapshot.params['token'];
 
     this.form = this.formBuilder.group({
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
+      password: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(6)]],
+      confirmPassword: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(6)]]
     });
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+    this.updatePassword(true);
   }
 
   get f() { return this.form.controls; }
@@ -51,11 +54,21 @@ export class UpdatePasswordComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authService.updatePassword(this.token, this.f.password.value)
+    this.updatePassword();
+  }
+
+  updatePassword(validate: boolean = false) {
+    this.authService.updatePassword(this.token, this.f.password.value, validate)
       .pipe(first())
       .subscribe(
         data => {
-          this.router.navigate([this.returnUrl]);
+          if (validate) {
+            this.isValid = true;
+            this.f['password'].enable();
+            this.f['confirmPassword'].enable();
+          } else {
+            this.router.navigate([this.returnUrl]);
+          }
         },
         error => {
           this.alertService.error(error);
